@@ -20,10 +20,13 @@ import { FormSuccess } from "../form-success";
 import { register } from "@/actions/register";
 import { useState, useTransition } from "react";
 import { RegisterSchema } from "@/schemas";
+import { useSearchParams } from "next/navigation";
 
 export const RegisterForm = () => {
   const [error, setError] = useState<string | undefined>("")
   const [success, setSuccess] = useState<string | undefined>("")
+
+  const searchParams = useSearchParams()
 
   const [isPending, startTransition] = useTransition();
 
@@ -35,6 +38,11 @@ export const RegisterForm = () => {
       name: ""
     },
   });
+
+  const urlError =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+      ? "Email already in use!"
+      : "";
 
   const onSubmit = async (values: z.infer<typeof RegisterSchema>) => {
     setError("")
@@ -107,7 +115,7 @@ export const RegisterForm = () => {
               )}
             />
           </div>
-          <FormError message={error} />
+          <FormError message={error || urlError} />
           <FormSuccess message={success} />
           <Button type="submit" className="w-full" disabled={isPending}>
             Create an account
