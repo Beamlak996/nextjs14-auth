@@ -48,8 +48,7 @@ export const LoginForm = () => {
       login(values)
         .then((data)=> {
           setError(data?.error)
-          // TODO: Add when we add email verification
-          // setSuccess(data?.success)
+          setSuccess(data?.success)
         })
     });
   };
